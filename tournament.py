@@ -33,7 +33,7 @@ def deletePlayers():
 def countPlayers():
     """Returns the number of players currently registered."""
 
-    return Count("players")
+    return Player.count()
 
 
 def registerPlayer(name):
@@ -91,7 +91,7 @@ def swissPairings():
     ranks = playerStandings()
     pairs = []
 
-    numPlayers = Count("players")
+    numPlayers = Player.count()
     """if numPlayers % 2 != 0:
         bye = ranks.pop(checkByes(tid, ranks, -1))
         reportBye(tid, bye[0]) """
@@ -109,7 +109,7 @@ def pairIsValid(player1, player2):
     return Match.existsFor(player1, player2)
 
 
-def checkPairs(ranks, player_looking, player_opponent):
+def checkPairs(ranks, player, player_opponent):
     """Checks if two players have already had a match against each other.
     If they have, recursively checks through the list until a valid match is
     found.
@@ -120,9 +120,9 @@ def checkPairs(ranks, player_looking, player_opponent):
         id2: potential matched player
     Returns id of matched player or original match if none are found.
     """
-    if id2 >= len(ranks):
-        return id1 + 1
-    elif pairIsValid(ranks[id1][0], ranks[id2][0]):
-        return id2
+    if player_opponent >= len(ranks):
+        return player + 1
+    elif pairIsValid(ranks[player][0], ranks[player_opponent][0]):
+        return player_opponent
     else:
-        return checkPairs(ranks, id1, (id2 + 1))
+        return checkPairs(ranks, player, (player_opponent + 1))
