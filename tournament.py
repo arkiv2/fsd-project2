@@ -4,17 +4,22 @@
 #
 
 from db_wrapper import *
+import Player
+import Score
+import Match
 
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
     deleteRow("matches")
+    resetScores()
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
     deleteRow("players")
+    deleteRow("scores")
 
 
 def countPlayers():
@@ -50,19 +55,27 @@ def playerStandings():
     return getStandings()
 
 
-def reportMatch(winner, loser):
+def reportMatch(winner, loser, draw='FALSE'):
     """Records the outcome of a single match between two players.
 
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
+      draw:   boolean value if draw
     """
+    wPoint = 1
+    lPoint = 0
+    
+    if draw == 'TRUE':
+        wPoint = 1
+        lPoint = 1
+        
     addMatch(winner, loser)
-    addWinner(winner)
-    addLoser(loser)
+    addScores(winner, wPoint)
+    addScores(loser, lPoint)
  
  
-def swissPairings():
+def swissPairings():      
     """Returns a list of pairs of players for the next round of a match.
   
     Assuming that there are an even number of players registered, each player
@@ -78,3 +91,51 @@ def swissPairings():
         name2: the second player's name
     """
 
+    ranks = playerStandings()
+    pairs = []
+
+    numPlayers = Count("players")
+    #if numPlayers % 2 != 0:
+        #bye = ranks.pop(checkByes(tid, ranks, -1))
+        #reportBye(tid, bye[0])
+
+    while len(ranks) > 1:
+        validMatch = checkPairs(ranks,0,1)
+        player1 = ranks.pop(0)
+        player2 = ranks.pop(validMatch - 1)
+        pairs.append((player1[0],player1[1],player2[0],player2[1]))
+
+    return pairs
+
+def pairIsValid(player1, player2):
+    """Checks if two players have already played against each other
+    Args:
+        player1: the id number of first player to check
+        player2: the id number of potentail paired player
+    Return true if valid pair, false if not
+    """
+    matches = getExistingMatchesCount(player1, player2)
+    if matches > 0:
+        return False
+    return True
+
+def checkPairs(ranks, id1, id2):
+    """Checks if two players have already had a match against each other.
+    If they have, recursively checks through the list until a valid match is
+    found.
+    Args:
+        tid: id of tournament
+        ranks: list of current ranks from swissPairings()
+        id1: player needing a match
+        id2: potential matched player
+    Returns id of matched player or original match if none are found.
+    """
+    if id2 >= len(ranks):
+        return id1 + 1
+    elif pairIsValid(ranks[id1][0], ranks[id2][0]):
+        return id2
+    else:
+        return checkPairs(ranks, id1, (id2 + 1))
+
+
+print(swissPairings())
