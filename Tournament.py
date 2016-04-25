@@ -7,6 +7,7 @@ __version__ = "1.1.3"
 __email__ = "arvalencia@gbox.adnu.edu.ph"
 __status__ = "Production"
 
+
 def getStandings(tournament_id):
     query = """SELECT s.player, p.name, s.score, s.matches, s.bye,
                     (SELECT SUM(s2.score)

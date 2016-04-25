@@ -40,7 +40,7 @@ def add_to_board(player_id, tournament_id):
     """
     query = """INSERT INTO scoreboard (tournament, player, score, matches, bye)
                                 VALUES (%s, %s, %s, %s, %s)"""
-    cursor.execute(query, (tournament_id, player_id, 0,0,0,))
+    cursor.execute(query, (tournament_id, player_id, 0, 0, 0,))
     conn.commit()
 
 

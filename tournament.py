@@ -48,7 +48,6 @@ def createTournament(name):
     return Tournament.create(name)
 
 
-
 def countPlayers(tID):
     """Returns the number of players currently registered."""
 
@@ -61,7 +60,6 @@ def registerPlayer(name, tournament_id):
         name: the player's full name (need not be unique).
         tournament: tournament id where player is to be added to
     """
-
 
     Player.addPlayer(name, tournament_id)
 
@@ -99,6 +97,7 @@ def reportMatch(tournament, winner, loser, draw='FALSE'):
     Match.add(tournament, winner, loser)
     Score.add(tournament, winner, wPoint)
     Score.add(tournament, loser, lPoint)
+
 
 def reportBye(player, tournament):
     Player.addBye(player, tournament)
