@@ -1,6 +1,6 @@
 import db_wrapper
 import Player
-from db_wrapper import cursor, conn
+from db_wrapper import *
 
 """Score.py: model that handles DB queries for scores"""
 
@@ -10,35 +10,39 @@ __email__ = "arvalencia@gbox.adnu.edu.ph"
 __status__ = "Production"
 
 
-def add(player_id, point):
+def add(tournament, player_id, point):
     """ Add scores to the database
         Args:
-            player_id = id of player to add the score
+            player_id = id of player to add the score to
             point = score to add to the player
     """
 
-    query = """UPDATE scores
+    query = """UPDATE scoreboard
                 SET score = score + %s,
                     matches = matches + 1
-                WHERE id = %s"""
-    cursor.execute(query, (point, player_id, ))
+                WHERE player = %s AND tournament = %s"""
+    cursor.execute(query, (point, player_id, tournament,))
     conn.commit()
 
 
 def reset():
     """ Resets the scores table """
 
-    query = "UPDATE scores SET matches = 0, score = 0"
+    query = "UPDATE scoreboard SET matches = 0, score = 0"
     cursor.execute(query)
     conn.commit()
 
 
-def addToBoard(player_id):
+def add_to_board(player_id, tournament_id):
     """ Add a player to the scoreboard
         Args:
             player_id = id of player to be added
     """
-    player = Player.getInfo(player_id)
-    query = "INSERT INTO scores VALUES (%s, %s, 0, 0)"
-    cursor.execute(query, (player[0], player[1],))
+    query = """INSERT INTO scoreboard (tournament, player, score, matches, bye)
+                                VALUES (%s, %s, %s, %s, %s)"""
+    cursor.execute(query, (tournament_id, player_id, 0,0,0,))
     conn.commit()
+
+
+def deleteAll():
+    deleteRow("scoreboard")

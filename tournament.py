@@ -7,6 +7,7 @@ from db_wrapper import *
 import Player
 import Score
 import Match
+import Tournament
 
 """tournament.py: main module that handles all the tournament logic"""
 
@@ -17,36 +18,58 @@ __status__ = "Production"
 
 
 def deleteMatches():
-    """Remove all the match records from the database."""
+    """Remove all match records from the database."""
 
-    deleteRow("matches")
+    Match.deleteAll()
     Score.reset()
 
 
+def deleteTournaments():
+    """Remove all match records from the database."""
+
+    Tournament.deleteAll()
+
+
 def deletePlayers():
-    """Remove all the player records from the database."""
+    """Remove all player records from the database."""
 
-    deleteRow("players")
-    deleteRow("scores")
+    Player.deleteAll()
+    Score.deleteAll()
 
 
-def countPlayers():
+def deleteScoreboard():
+    """Removes all score records from the database."""
+
+    Score.deleteAll()
+
+
+def createTournament(name):
+
+    return Tournament.create(name)
+
+
+
+def countPlayers(tID):
     """Returns the number of players currently registered."""
 
-    return Player.count()
+    return Player.count(tID)
 
 
-def registerPlayer(name):
+def registerPlayer(name, tournament_id):
     """Adds a player to the tournament database.
        Args:
         name: the player's full name (need not be unique).
+        tournament: tournament id where player is to be added to
     """
 
-    Player.addPlayer(name)
+
+    Player.addPlayer(name, tournament_id)
 
 
-def playerStandings():
+def playerStandings(tournament_id):
     """Returns a list of the players and their win records, sorted by wins.
+        Args:
+            tournament_id: id of tournament to be queried
         Returns:
           A list of tuples, each of which contains (id, name, wins, matches):
             id: the player's unique id (assigned by the database)
@@ -55,29 +78,42 @@ def playerStandings():
             matches: the number of matches the player has played
     """
 
-    return getStandings()
+    return Tournament.getStandings(tournament_id)
 
 
-def reportMatch(winner, loser, draw='FALSE'):
+def reportMatch(tournament, winner, loser, draw='FALSE'):
     """Records the outcome of a single match between two players.
         Args:
+          tournament: id of tournament
           winner:  the id number of the player who won
           loser:  the id number of the player who lost
           draw:   boolean value if draw
     """
-    wPoint = 1
-    lPoint = 0
-
     if draw == 'TRUE':
         wPoint = 1
         lPoint = 1
+    else:
+        wPoint = 3
+        lPoint = 0
 
-    Match.add(winner, loser)
-    Score.add(winner, wPoint)
-    Score.add(loser, lPoint)
+    Match.add(tournament, winner, loser)
+    Score.add(tournament, winner, wPoint)
+    Score.add(tournament, loser, lPoint)
+
+def reportBye(player, tournament):
+    Player.addBye(player, tournament)
 
 
-def swissPairings():
+def checkByes(tournament, ranks, index):
+    if abs(index) > len(ranks):
+        return -1
+    elif not Player.hasBye(ranks[index][0], tournament):
+        return index
+    else:
+        return checkByes(tournament, ranks, (index - 1))
+
+
+def swissPairings(tournament):
     """Returns a list of pairs of players for the next round of a match.
 
         Returns:
@@ -88,13 +124,13 @@ def swissPairings():
             name2: the second player's name
     """
 
-    ranks = playerStandings()
+    ranks = playerStandings(tournament)
     pairs = []
 
-    numPlayers = Player.count()
-    """if numPlayers % 2 != 0:
-        bye = ranks.pop(checkByes(tid, ranks, -1))
-        reportBye(tid, bye[0]) """
+    numPlayers = Player.count(tournament)
+    if numPlayers % 2 != 0:
+        bye = ranks.pop(checkByes(tournament, ranks, -1))
+        reportBye(tournament, bye[0])
 
     while len(ranks) > 1:
         validMatch = checkPairs(ranks, 0, 1)

@@ -1,7 +1,7 @@
 import psycopg2
 
 
-conn = psycopg2.connect("dbname=tournament")
+conn = psycopg2.connect("dbname=tourney")
 cursor = conn.cursor()
 
 def disConnect():

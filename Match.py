@@ -1,5 +1,5 @@
 import db_wrapper
-from db_wrapper import conn, cursor
+from db_wrapper import *
 
 """Match.py: model that handles DB queries for matches"""
 
@@ -9,16 +9,16 @@ __email__ = "arvalencia@gbox.adnu.edu.ph"
 __status__ = "Production"
 
 
-def add(player_id1, player_id2, draw='FALSE'):
+def add(tournament, player_id1, player_id2, draw='FALSE'):
     """ Adds a match to the database
         Args:
             player_id1 = id of player to be added to the match
             player_id2 = id of player to be added to the match
             draw = boolean value if draw; default is FALSE
     """
-    query = "INSERT INTO matches(winner, loser,isDraw)\
-                    VALUES(%s,%s,%s)"
-    cursor.execute(query, (player_id1, player_id2, draw, ))
+    query = """INSERT INTO matches(tournament, winner, loser, draw)
+                    VALUES(%s,%s,%s,%s)"""
+    cursor.execute(query, (tournament, player_id1, player_id2, draw,))
     conn.commit()
 
 
@@ -32,3 +32,7 @@ def existsFor(player1, player2):
     if matches > 0:
         return False
     return True
+
+
+def deleteAll():
+    deleteRow("matches")
