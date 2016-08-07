@@ -124,4 +124,4 @@ python extra_credit_test.py
 
 **Credits**
 
-   ###### [TestSuite]: BenBrandt
+   [BenBrandt]: <>
