@@ -16,13 +16,22 @@ def add(tournament, player_id1, player_id2, draw='FALSE'):
             player_id2 = id of player to be added to the match
             draw = boolean value if draw; default is FALSE
     """
-    query = """INSERT INTO matches(tournament, winner, loser, draw)
+
+    query = """INSERT INTO matches(tournament, winner, loser, isDraw)
                     VALUES(%s,%s,%s,%s)"""
     cursor.execute(query, (tournament, player_id1, player_id2, draw,))
     conn.commit()
 
 
 def existsFor(player1, player2):
+    """ Checks if a player has played against another player
+        Args:
+            player1 = id of player to be checked against another player
+            player2 = id of player to be added to the match
+        Returns:
+            boolean value if player1 has played a match against player2
+    """
+
     query = """SELECT winner, loser
              FROM matches
              WHERE ((winner = %s AND loser = %s)
@@ -35,4 +44,6 @@ def existsFor(player1, player2):
 
 
 def deleteAll():
+    """  Deletes all matches from the database """
+
     deleteRow("matches")

@@ -18,20 +18,20 @@ __status__ = "Production"
 
 
 def deleteMatches():
-    """Remove all match records from the database."""
+    """Removes all match records from the database."""
 
     Match.deleteAll()
     Score.reset()
 
 
 def deleteTournaments():
-    """Remove all match records from the database."""
+    """Removes all match records from the database."""
 
     Tournament.deleteAll()
 
 
 def deletePlayers():
-    """Remove all player records from the database."""
+    """Removes all player records from the database."""
 
     Player.deleteAll()
     Score.deleteAll()
@@ -44,49 +44,74 @@ def deleteScoreboard():
 
 
 def createTournament(name):
+    """
+        Creates a tournament and returns the created tournament id
+        Args:
+            name: name of new tournament
+        Returns:
+            id: the tournament id of newly created tournament
+    """
 
     return Tournament.create(name)
 
 
 def countPlayers(tID):
-    """Returns the number of players currently registered."""
+    """Returns the number of players currently registered in a tournament"""
 
     return Player.count(tID)
 
 
 def registerPlayer(name, tournament_id):
-    """Adds a player to the tournament database.
-       Args:
-        name: the player's full name (need not be unique).
-        tournament: tournament id where player is to be added to
+    """
+        Adds a player to the tournament database.
+        Args:
+            name =  the player's full name (need not be unique).
+            tournament =  tournament id where player is to be added to
     """
 
     Player.addPlayer(name, tournament_id)
 
 
 def playerStandings(tournament_id):
-    """Returns a list of the players and their win records, sorted by wins.
+    """
+        Queries tournament data for current ranking of players
         Args:
-            tournament_id: id of tournament to be queried
+            tournament_id =  id of tournament to be queried
         Returns:
           A list of tuples, each of which contains (id, name, wins, matches):
-            id: the player's unique id (assigned by the database)
-            name: the player's full name (as registered)
-            wins: the number of matches the player has won
-            matches: the number of matches the player has played
+            id = the player's unique id (assigned by the database)
+            name =  the player's full name (as registered)
+            wins =  the number of matches the player has won
+            matches = the number of matches the player has played
     """
 
     return Tournament.getStandings(tournament_id)
 
 
-def reportMatch(tournament, winner, loser, draw='FALSE'):
-    """Records the outcome of a single match between two players.
-        Args:
-          tournament: id of tournament
-          winner:  the id number of the player who won
-          loser:  the id number of the player who lost
-          draw:   boolean value if draw
+def checkBye(player_id, tournament):
     """
+        Checks if a player has bye in a tournament
+        Args:
+            player_id = id of the player to check
+            tournament: id of tournament to be queried
+        Returns:
+            boolean value; True if player has bye
+    """
+
+    return Player.hasBye(player_id, tournament)
+
+
+def reportMatch(tournament, winner, loser, draw='FALSE'):
+    """
+        Reports a match's result to the database and assigns
+        corresponding points to a player
+        Args:
+            tournament =  id of tournament where the match took place
+            winner = id of the winner
+            loser =  id of the loser
+            draw =  true if the match is  a draw
+    """
+
     if draw == 'TRUE':
         wPoint = 1
         lPoint = 1
@@ -100,10 +125,26 @@ def reportMatch(tournament, winner, loser, draw='FALSE'):
 
 
 def reportBye(player, tournament):
+    """
+        Gives a player a bye
+        Args:
+            player = id of player awarded by a bye
+            tournament =  id of tournament where the match took place
+    """
+
     Player.addBye(player, tournament)
 
 
 def checkByes(tournament, ranks, index):
+    """
+        Logic to handle tournament checking of byes
+        Args:
+            tournament =  id of tournament to query
+            ranks = a list of tuples of rankings of players  from tournament
+                standing
+        Returns:
+    """
+
     if abs(index) > len(ranks):
         return -1
     elif not Player.hasBye(ranks[index][0], tournament):
@@ -123,7 +164,7 @@ def swissPairings(tournament):
             name2: the second player's name
     """
 
-    ranks = playerStandings(tournament)
+    ranks = playerStandings(tournament)  # Queries the database for
     pairs = []
 
     numPlayers = Player.count(tournament)
@@ -141,19 +182,33 @@ def swissPairings(tournament):
 
 
 def pairIsValid(player1, player2):
+    """
+        Checks if a two players have already played with each other
+        Args:
+            player1 = id of player finding match
+            player2 =  id of player to be cross checked
+        Returns:
+            boolean value: True if a match already exists
+    """
+
     return Match.existsFor(player1, player2)
 
 
 def checkPairs(ranks, player, player_opponent):
-    """Checks if two players have already had a match against each other.
-    If they have, recursively checks through the list until a valid match is
-    found.
+    """
+        Main logic for checking players matches
+            If a player is to be matched with another
+            player, this checks if a match already exists
+            between them. If a match exists, player will
+            be recursively matched against other players
+            in the tournament
     Args:
-        tid: id of tournament
-        ranks: list of current ranks from swissPairings()
-        id1: player needing a match
-        id2: potential matched player
-    Returns id of matched player or original match if none are found.
+        ranks = list of current ranks from swissPairings()
+        player = player needing a match
+        player_opponent = player to be matched
+    Returns:
+        id of matched player
+
     """
     if player_opponent >= len(ranks):
         return player + 1

@@ -13,6 +13,8 @@ __status__ = "Production"
 def add(tournament, player_id, point):
     """ Add scores to the database
         Args:
+            tournament = id of the tournament where the scoreboard
+                                    updates to
             player_id = id of player to add the score to
             point = score to add to the player
     """
@@ -34,10 +36,12 @@ def reset():
 
 
 def add_to_board(player_id, tournament_id):
-    """ Add a player to the scoreboard
+    """ Adds a player to the scoreboard
         Args:
             player_id = id of player to be added
+            tournament_id = id of the tournament where the player will play
     """
+
     query = """INSERT INTO scoreboard (tournament, player, score, matches, bye)
                                 VALUES (%s, %s, %s, %s, %s)"""
     cursor.execute(query, (tournament_id, player_id, 0, 0, 0,))
@@ -45,4 +49,6 @@ def add_to_board(player_id, tournament_id):
 
 
 def deleteAll():
+    """ Deletes all the scoreboard records """
+
     deleteRow("scoreboard")

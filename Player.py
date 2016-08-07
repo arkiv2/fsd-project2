@@ -3,6 +3,14 @@ import Score
 
 
 def addPlayer(player_name, tournament):
+    """ Adds a player to the database and initializes the
+        player's scoreboard
+
+        Args:
+            player_name = name of player to be added to the database
+            tournament = id of tournament where the player will play
+    """
+
     name = player_name
     insertPlayer = "INSERT INTO players (name) VALUES (%s) RETURNING id"
     cursor.execute(insertPlayer, (name,))
@@ -12,6 +20,12 @@ def addPlayer(player_name, tournament):
 
 
 def addBye(player, tournament):
+    """ Adds a bye to a certain player in a tournament
+        Args:
+            player = id of player to receive the bye
+            tournament = id of the tournament where the player plays
+    """
+
     query = """UPDATE scoreboard
                SET score = score + 3, bye = bye + 1
                WHERE player = %s AND tournament = %s"""
@@ -20,6 +34,12 @@ def addBye(player, tournament):
 
 
 def hasBye(player, tournament):
+    """ Checks if a player has a recorded bye
+        Args:
+            player = id of player to check
+            tournament = id of the tournament where the player plays
+    """
+
     query = """SELECT bye FROM scoreboard
                WHERE player = %s AND tournament = %s"""
     cursor.execute(query, (player, tournament,))
@@ -30,28 +50,14 @@ def hasBye(player, tournament):
         return False
 
 
-def getID(player_name):
-    query = "SELECT id FROM players WHERE name = %s"
-    cursor.execute(query, (player_name,))
-    pID = cursor.fetchone()[0]
-    return pID
-
-
-def getInfo(player_id):
-    query = "SELECT * FROM players WHERE id = %s"
-    cursor.execute(query, (player_id,))
-    player_info = cursor.fetchone()
-    return player_info
-
-
-def getAll():
-    query = "SELECT * FROM players"
-    cursor.execute(query)
-    players = cursor.fetchall()
-    return players
-
-
 def count(tID):
+    """ Counts the number of players in a given tournament
+        Args:
+            tID = id of the tournament
+        Returns:
+            result = integer count of the players
+    """
+
     query = "SELECT COUNT(player) FROM scoreboard WHERE tournament = %s"
     cursor.execute(query, (tID,))
     result = cursor.fetchone()[0]
@@ -59,4 +65,6 @@ def count(tID):
 
 
 def deleteAll():
+    """  Deletes all matches from the database """
+
     deleteRow("players")

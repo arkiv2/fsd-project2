@@ -9,21 +9,33 @@ __status__ = "Production"
 
 
 def getStandings(tournament_id):
-    query = """SELECT s.player, p.name, s.score, s.matches, s.bye,
-                    (SELECT SUM(s2.score)
-                     FROM scoreboard AS s2
-                     WHERE s2.player IN (SELECT loser
-                                     FROM matches
-                                     WHERE winner = s.player
-                                     AND tournament = %s)
-                     OR s2.player IN (SELECT winner
-                                 FROM matches
-                                 WHERE loser = s.player
-                                 AND tournament = %s)) AS owm
-                 FROM scoreboard AS s
-                 INNER JOIN players AS p on p.id = s.player
-                 WHERE tournament = %s
-                 ORDER BY s.score DESC, owm DESC, s.matches DESC"""
+    """
+        Get the current ranking of players in a tournament
+        Args:
+            tournament_id = id of the tournament to check ranks
+        Returns:
+            ranks = a list of tuples of players ranked by the system
+    """
+
+    query = """
+            SELECT S.player, P.name, S.score, S.matches, S.bye, (
+                SELECT SUM(scBoard.score)
+                FROM scoreboard AS scBoard
+                WHERE scBoard.player IN (
+                    SELECT loser
+                    FROM matches
+                    WHERE winner = S.player
+                    AND tournament = %s)
+                OR scBoard.player IN (
+                    SELECT winner
+                    FROM matches
+                    WHERE loser = S.player
+                    AND tournament = %s))
+                AS subQuery
+            FROM scoreboard AS S
+            INNER JOIN players AS P on P.id = S.player
+            WHERE tournament = %s
+            ORDER BY S.score DESC, subQuery DESC, S.matches DESC"""
     cursor.execute(query, (tournament_id, tournament_id, tournament_id,))
     ranks = []
     for row in cursor.fetchall():
@@ -36,6 +48,14 @@ def deleteAll():
 
 
 def create(name):
+    """
+        Creates a tournament
+        Args:
+            name = name of the tournament to be created
+        Returns:
+            tournament_id = id of the newly created tournament
+    """
+
     query = "INSERT INTO tournaments (name) VALUES (%s) RETURNING id"
     cursor.execute(query, (name,))
     tournament_id = cursor.fetchone()[0]

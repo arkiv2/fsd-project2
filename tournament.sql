@@ -1,12 +1,12 @@
---\c postgres
---DROP DATABASE IF EXISTS tournament;
---
---CREATE DATABASE tournament;
---
---\c tournament;
+DROP DATABASE IF EXISTS tournamentdb;
+
+CREATE DATABASE tournamentdb;
+
+\c tournamentdb;
 
 CREATE TABLE matches (
-	match_id SERIAL PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
+	tournament integer,
 	winner integer,
 	loser integer,
 	isDraw boolean
@@ -18,9 +18,16 @@ CREATE TABLE players (
 	name varchar
 );
 
-CREATE TABLE scores (
+CREATE TABLE scoreboard (
 	id SERIAL PRIMARY KEY,
-	player_id integer,
+	player integer,
 	score integer,
-	matches integer
+	matches integer,
+	tournament integer,
+	bye integer
+);
+
+CREATE TABLE tournaments(
+	id SERIAL PRIMARY KEY,
+	name varchar
 );
