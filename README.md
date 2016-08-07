@@ -124,4 +124,4 @@ python extra_credit_test.py
 
 **Credits**
 
-   [BenBrandt]: <>
+   [BenBrandt]: <Test Suite and some tournament logics>
