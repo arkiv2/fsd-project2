@@ -1,45 +1,117 @@
-# fsd-project3
-Udacity FSD(Full Stack Developer Nanodegree) Course Requirement 
-
+# FSD-Project3
+## Udacity FSD(Full Stack Developer Nanodegree) Course Requirement 
 This project is a python application that emulates a swiss-style tournament
-
-Features
-
 
 ### Version
 1.1.3
 
-### Tech
+### Requirements
+* python 2.7
+* pip
+* psycopg2
+* postgresql-9.5
+
+### Features
+##### Supports
+* ###### Multiple tournaments
+* ###### Odd number of players
+* ###### Tournament Byes
+* ###### Zero Rematch
 
 
 ### Installation
-
+* ##### Clone
+    ```sh
+    $ git clone https://github.com/arkiv2/fsd-project2.git SwissTournament
+    $ cd SwissTournament
+    ```
+* ##### Installing Database Blueprint
+    ```sh
+    $ sudo -u postgres psql
+    postgres=# \i tournament.sql
+    ```
+    
+###### Create a new file and import from tournament.py
+Add this line at the top
 ```sh
-$ git clone https://github.com/arkiv2/fsd-project2.git SwissTournament
-$ cd SwissTournament
-$ python main.py
+from tournament import *
 ```
 
-### Usage
-1. Edit main.py file
+## Usage
+* ### Creating a tournament
+    * #### Syntax
+        ```sh
+        tID = createTournament(Name)
+        ```
+    * #### Usage
+        ```sh
+        tID = createTournament("Olympics")
+        ```
 
-### Syntax
-```sh
-TODO
-```
+* ### Creating a player
+    * #### Syntax
+        ```sh
+        RegisterPlayer(Name, Tournament_ID)
+        ```
+    * #### Usage
+        ```sh
+        RegisterPlayer("Arki Valencia", tID)
+        ```
 
-### Example
-```sh
-TODO
-```
+* ### Applying swiss-style tournament
+    * #### Syntax
+        ```sh
+        pairings = swissPairings(Tournament_ID)
+        ```
+    * #### Usage
+        ```sh
+        pairings = swissPairings(tID)
+        ```
 
+* ### Reporting match results
+    * #### Syntax
+        ```sh
+        reportMatch(Tournament_ID, Winner, Loser, isDraw = False)
+        ```
+    * #### Usage
+        ```sh
+        reportMatch(tID, 1, 2)          // Player_ID 1 is the winner
+        reportMatch(tID, 1, 2, True)    // Match is a draw
+        ```
 
+* ### Get Player Standings
+    * #### Syntax
+        ```sh
+        standings = playerStandings(Tournament_ID)
+        ```
+    * #### Usage
+        ```sh
+        standings = playerStandings(tID)
+        ```
+
+* ### Reporting a bye
+    * #### Syntax
+        ```sh
+        reportBye(Player_ID, Tournament_ID)
+        ```
+    * #### Usage
+        ```sh
+        reportBye(pID, tID)
+        ```
+        
+* ### Deleting Records
+    * #### Usage
+        ```sh
+        deleteMatches()
+        deletePlayers()
+        deleteTournaments()
+        deleteScoreboard()
+        ```
 
 ### Plugins
-
-TODO
+* #### psycopg2 - the most popular PostgreSQL adapter for the Python programming language
 
 
 **Credits**
 
-   TODO
+    [TestSuite]: BenBrandt
