@@ -47,6 +47,23 @@ def deleteAll():
     deleteRow("tournaments")
 
 
+def hasBye(player, tournament):
+    """ Checks if a player has a recorded bye
+        Args:
+            player = id of player to check
+            tournament = id of the tournament where the player plays
+    """
+
+    query = """SELECT bye FROM scoreboard
+               WHERE player = %s AND tournament = %s"""
+    cursor.execute(query, (player, tournament,))
+    bye = cursor.fetchone()[0]
+    if bye == 0:
+        return True
+    else:
+        return False
+
+
 def create(name):
     """
         Creates a tournament

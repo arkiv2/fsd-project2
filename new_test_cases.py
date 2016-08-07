@@ -170,7 +170,6 @@ def testCheckByes():
     registerPlayer("Bruno Walton", tid)
     registerPlayer("Boots O'Neal", tid)
     standings = playerStandings(tid)
-    print standings[1][0]
     id = standings[-1][0]
     reportBye(id, tid)
     standings = playerStandings(tid)
@@ -229,7 +228,7 @@ def testOddPairings():
     [(pid1, pname1, pid2, pname2), (pid3, pname3, pid4, pname4)] = pairings
     correct_pairs = set([frozenset([id1, id3]), frozenset([id2, id4])])
     actual_pairs = set([frozenset([pid1, pid2]), frozenset([pid3, pid4])])
-    if correct_pairs != actual_pairs and not Player.hasBye(id5, tid):
+    if correct_pairs != actual_pairs and not Tournament.hasBye(id5, tid):
         raise ValueError(
             "Bye should be given to last standing")
     print "12. With odd number, last player should have bye."

@@ -44,7 +44,7 @@ def hasBye(player, tournament):
                WHERE player = %s AND tournament = %s"""
     cursor.execute(query, (player, tournament,))
     bye = cursor.fetchone()[0]
-    if bye == 0:
+    if bye == 1:
         return True
     else:
         return False

@@ -147,7 +147,7 @@ def checkByes(tournament, ranks, index):
 
     if abs(index) > len(ranks):
         return -1
-    elif not Player.hasBye(ranks[index][0], tournament):
+    elif not Tournament.hasBye(ranks[index][0], tournament):
         return index
     else:
         return checkByes(tournament, ranks, (index - 1))
