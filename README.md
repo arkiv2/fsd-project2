@@ -108,10 +108,20 @@ from tournament import *
     deleteScoreboard()
     ```
 
+### Using the test cases
+```sh
+chmod +x extra_credit_test.py
+./extra_credit_test.py
+```
+or
+```sh
+python extra_credit_test.py
+```
+
 ### Plugins
 * psycopg2 - the most popular PostgreSQL adapter for the Python programming language
 
 
 **Credits**
 
-    [TestSuite]: BenBrandt
+   ###### [TestSuite]: BenBrandt
