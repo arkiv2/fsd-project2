@@ -13,19 +13,19 @@ This project is a python application that emulates a swiss-style tournament
 
 ### Features
 ##### Supports
-* ###### Multiple tournaments
-* ###### Odd number of players
-* ###### Tournament Byes
-* ###### Zero Rematch
+* Multiple tournaments
+* Odd number of players
+* Tournament Byes
+* Zero Rematch
 
 
 ### Installation
-* ##### Clone
+* Clone
     ```sh
     $ git clone https://github.com/arkiv2/fsd-project2.git SwissTournament
     $ cd SwissTournament
     ```
-* ##### Installing Database Blueprint
+* Installing Database Blueprint
     ```sh
     $ sudo -u postgres psql
     postgres=# \i tournament.sql
@@ -39,68 +39,68 @@ from tournament import *
 
 ## Usage
 * ### Creating a tournament
-    * #### Syntax
+    * Syntax
         ```sh
         tID = createTournament(Name)
         ```
-    * #### Usage
+    * Usage
         ```sh
         tID = createTournament("Olympics")
         ```
 
 * ### Creating a player
-    * #### Syntax
+    * Syntax
         ```sh
         RegisterPlayer(Name, Tournament_ID)
         ```
-    * #### Usage
+    * Usage
         ```sh
         RegisterPlayer("Arki Valencia", tID)
         ```
 
 * ### Applying swiss-style tournament
-    * #### Syntax
+    * Syntax
         ```sh
         pairings = swissPairings(Tournament_ID)
         ```
-    * #### Usage
+    * Usage
         ```sh
         pairings = swissPairings(tID)
         ```
 
 * ### Reporting match results
-    * #### Syntax
+    * Syntax
         ```sh
         reportMatch(Tournament_ID, Winner, Loser, isDraw = False)
         ```
-    * #### Usage
+    * Usage
         ```sh
         reportMatch(tID, 1, 2)          // Player_ID 1 is the winner
         reportMatch(tID, 1, 2, True)    // Match is a draw
         ```
 
 * ### Get Player Standings
-    * #### Syntax
+    * Syntax
         ```sh
         standings = playerStandings(Tournament_ID)
         ```
-    * #### Usage
+    * Usage
         ```sh
         standings = playerStandings(tID)
         ```
 
 * ### Reporting a bye
-    * #### Syntax
+    * Syntax
         ```sh
         reportBye(Player_ID, Tournament_ID)
         ```
-    * #### Usage
+    * Usage
         ```sh
         reportBye(pID, tID)
         ```
         
 * ### Deleting Records
-    * #### Usage
+    * Usage
         ```sh
         deleteMatches()
         deletePlayers()
@@ -109,7 +109,7 @@ from tournament import *
         ```
 
 ### Plugins
-* #### psycopg2 - the most popular PostgreSQL adapter for the Python programming language
+* psycopg2 - the most popular PostgreSQL adapter for the Python programming language
 
 
 **Credits**
