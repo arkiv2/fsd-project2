@@ -7,7 +7,7 @@ from db_wrapper import *
 import Player
 import Score
 import Match
-import Tournament
+import Competition
 
 """tournament.py: main module that handles all the tournament logic"""
 
@@ -27,7 +27,7 @@ def deleteMatches():
 def deleteTournaments():
     """Removes all match records from the database."""
 
-    Tournament.deleteAll()
+    Competition.deleteAll()
 
 
 def deletePlayers():
@@ -52,7 +52,7 @@ def createTournament(name):
             id: the tournament id of newly created tournament
     """
 
-    return Tournament.create(name)
+    return Competition.create(name)
 
 
 def countPlayers(tID):
@@ -85,7 +85,7 @@ def playerStandings(tournament_id):
             matches = the number of matches the player has played
     """
 
-    return Tournament.getStandings(tournament_id)
+    return Competition.getStandings(tournament_id)
 
 
 def checkBye(player_id, tournament):
@@ -147,7 +147,7 @@ def checkByes(tournament, ranks, index):
 
     if abs(index) > len(ranks):
         return -1
-    elif not Tournament.hasBye(ranks[index][0], tournament):
+    elif not Competition.hasBye(ranks[index][0], tournament):
         return index
     else:
         return checkByes(tournament, ranks, (index - 1))
