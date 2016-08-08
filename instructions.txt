@@ -1,4 +1,0 @@
-// Run this on a terminal
-
-sudo -u postgres createuser db_admin
-sudo -u postgres createdb tournamentdb -O db_admin
