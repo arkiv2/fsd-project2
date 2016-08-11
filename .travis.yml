@@ -4,6 +4,6 @@ python:
   - "3.2"
 # command to install dependencies
 install:
-  - pip install -r install_me.txt
+  - pip install psycopg2
 # command to run tests
-script: nosetests
+script: python extra_credit_test.py
