@@ -1,0 +1,9 @@
+language: python
+python:
+  - "2.7"
+  - "3.2"
+# command to install dependencies
+install:
+  - pip install -r install_me.txt
+# command to run tests
+script: nosetests
