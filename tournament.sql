@@ -18,14 +18,14 @@ CREATE TABLE players (
 
 CREATE TABLE matches (
 	id SERIAL PRIMARY KEY,
-	tournament integer REFERENCES tournaments(id)
+	tournament integer REFERENCES tournaments(id) ON DELETE CASCADE
 );
 
 -- Pivot table for players and tournaments
 -- Registered players in a tournament
 CREATE TABLE player_tournament (
-	player INTEGER REFERENCES players(id),
-	tournament INTEGER REFERENCES tournaments(id),
+	player INTEGER REFERENCES players(id) ON DELETE CASCADE,
+	tournament INTEGER REFERENCES tournaments(id) ON DELETE CASCADE,
 	PRIMARY KEY (player, tournament)
 );
 
@@ -34,15 +34,15 @@ CREATE TYPE game_result AS ENUM ('win', 'loss', 'draw');
 
 -- Holds records for player's game result
 CREATE TABLE scoreboard (
-	player INTEGER REFERENCES players(id),
-	match INTEGER REFERENCES matches(id),
+	player INTEGER REFERENCES players(id) ON DELETE CASCADE,
+	match INTEGER REFERENCES matches(id) ON DELETE CASCADE,
 	result game_result
 );
 
 -- Count all participants in a tournament
 CREATE VIEW players_in_tournament AS
-	SELECT tournaments.id, tournaments.name as "Tournament Name",
-		 count(player_tournament.player) as "Participants"
+	SELECT tournaments.id as tourID, tournaments.name as tournamentName,
+		 count(player_tournament.player) as Participants
 	FROM player_tournament, tournaments
 	WHERE tournaments.id = player_tournament.tournament
 	GROUP BY tournaments.id;
@@ -86,7 +86,7 @@ CREATE VIEW player_draws AS
 CREATE VIEW player_standings AS
 	SELECT player_wins.player, player_wins.tournament, 
 		 player_wins.Wins, player_losses.Losses, player_draws.Draws,
-		 player_wins.Wins + player_losses.Losses + player_draws.Draws AS "Matches Played"
+		 player_wins.Wins + player_losses.Losses + player_draws.Draws AS matchesPlayed
 	FROM player_wins JOIN player_losses
 		ON player_wins.player = player_losses.player AND player_wins.tournament = player_losses.tournament
 		JOIN player_draws
