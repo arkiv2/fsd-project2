@@ -12,5 +12,5 @@ def disConnect():
 
 
 def deleteRow(table_name):
-    cursor.execute("DELETE FROM %s" % (table_name,))
+    cursor.execute("DELETE FROM {}".format(table_name,))
     conn.commit()
