@@ -4,30 +4,29 @@ CREATE DATABASE tournamentdb;
 
 \c tournamentdb;
 
-CREATE TABLE matches (
+CREATE TABLE tournaments(
 	id SERIAL PRIMARY KEY,
-	tournament integer,
-	winner integer,
-	loser integer,
-	isDraw boolean
+	name varchar
 );
-
 
 CREATE TABLE players (
 	id SERIAL PRIMARY KEY,
 	name varchar
 );
 
-CREATE TABLE scoreboard (
+CREATE TABLE matches (
 	id SERIAL PRIMARY KEY,
-	player integer,
-	score integer,
-	matches integer,
-	tournament integer,
-	bye integer
+	tournament integer REFERENCES tournaments(id),
+	winner integer REFERENCES players(id),
+	loser integer REFERENCES players(id),
+	isDraw boolean
 );
 
-CREATE TABLE tournaments(
+CREATE TABLE scoreboard (
 	id SERIAL PRIMARY KEY,
-	name varchar
+	player integer REFERENCES players(id),
+	score integer,
+	matches integer,
+	tournament integer REFERENCES tournaments(id),
+	bye integer
 );
