@@ -2,8 +2,7 @@ import psycopg2
 
 
 conn = psycopg2.connect(dbname="tournamentdb",
-                        user="postgres",
-                        password="123qwe")
+                        user="postgres")
 cursor = conn.cursor()
 
 
