@@ -1,5 +1,6 @@
 from db_wrapper import *
 import Score
+import Competition
 
 
 def addPlayer(player_name, tournament):
@@ -16,7 +17,7 @@ def addPlayer(player_name, tournament):
     cursor.execute(insertPlayer, (name,))
     player = cursor.fetchone()[0]
     conn.commit()
-    Score.add_to_board(player, tournament)
+    Competition.registerPlayer(tournament, player)
 
 
 def addBye(player, tournament):
@@ -58,7 +59,8 @@ def count(tID):
             result = integer count of the players
     """
 
-    query = "SELECT COUNT(player) FROM scoreboard WHERE tournament = %s"
+    query = """SELECT COALESCE((SELECT Participants FROM players_in_tournament
+                        WHERE tourID = %s), 0)"""
     cursor.execute(query, (tID,))
     result = cursor.fetchone()[0]
     return result
