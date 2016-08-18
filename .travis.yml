@@ -8,4 +8,4 @@ install: pip install pytest
 before_script:
   - psql -f tournament.sql; -U postgres
 
-script: test_runner.py
+script: nosetests test_runner.py
