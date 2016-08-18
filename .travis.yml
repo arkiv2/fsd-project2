@@ -6,6 +6,6 @@ install: pip install psycopg2
 install: pip install pytest
 
 before_script:
-  - psql \i tournament.sql; -U postgres
+  - psql -f tournament.sql; -U postgres
 
 script: test_runner.py
