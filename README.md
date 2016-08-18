@@ -1,4 +1,4 @@
-# FSD-Project3
+# FSD-Project3 [![Build Status](https://travis-ci.org/arkiv2/tournament-results.svg?branch=normalized)](https://travis-ci.org/arkiv2/tournament-results)
 ## Udacity FSD(Full Stack Developer Nanodegree) Course Requirement 
 This project is a python application that emulates a swiss-style tournament
 
