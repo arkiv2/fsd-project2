@@ -21,7 +21,7 @@ def deleteMatches():
     """Removes all match records from the database."""
 
     Match.deleteAll()
-    Score.reset()
+    Score.deleteAll()
 
 
 def deleteTournaments():
@@ -40,7 +40,7 @@ def deletePlayers():
 def deleteScoreboard():
     """Removes all score records from the database."""
 
-    Score.deleteAll()
+    Competition.deleteAll()
 
 
 def createTournament(name):
