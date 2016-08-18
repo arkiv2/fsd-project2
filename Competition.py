@@ -78,3 +78,10 @@ def create(name):
     tournament_id = cursor.fetchone()[0]
     conn.commit()
     return tournament_id
+
+
+def registerPlayer(tID, pID):
+    query = """INSERT INTO player_tournament (player, tournament)
+                        VALUES (%s, %s)"""
+    cursor.execute(query, (pID, tID,))
+    conn.commit()
